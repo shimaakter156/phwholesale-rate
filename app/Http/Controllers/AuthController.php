@@ -88,7 +88,7 @@ class AuthController extends Controller
             return response()->json([
                 'status' => 0,
                 'message' => 'Invalid Use ID or Password!'
-            ],500);
+            ],200);
         }
     }
 
@@ -154,6 +154,7 @@ class AuthController extends Controller
 //            $check_time_period->save();
 //        }
         return response()->json([
+            'status'=>1,
             'access_token' => $token,
             'token_type' => 'bearer',
             'expires_in' => $this->guard()->factory()->getTTL() * 60,

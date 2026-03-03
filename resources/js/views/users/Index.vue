@@ -9,12 +9,6 @@
       </div>
     </div>
     <advanced-datatable :options="tableOptions">
-      <template slot="department" slot-scope="row">
-        <span>{{row.item.Department}}</span>
-      </template>
-      <template slot="role" slot-scope="row">
-        <span>{{row.item.UserType}}</span>
-      </template>
       <template slot="action" slot-scope="row">
         <a href="javascript:" @click="addDeptModal(row.item)"> <i class="ti-pencil-alt"></i></a>
         <a href="javascript:" @click="changePassword(row.item.StaffID)"> <i class="ti-lock"></i></a>
@@ -37,9 +31,9 @@ export default {
       tableOptions: {
         source: 'user/list',
         search: true,
-        slots: [4,8,11],
-        hideColumn: ['RoleID','StaffID','Status'],
-        slotsName: ['department','role','action'],
+        slots: [9],
+        hideColumn: ['UserTypeID','UpdatedAt','UpdatedBy','Status'],
+        slotsName: ['action'],
         sortable: [2],
         pages: [20, 50, 100],
         addHeader: ['Action']

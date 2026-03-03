@@ -22,14 +22,14 @@
             </li>
           </ul>
         </div>
-        <p class="pad-cus"><b>{{me.StaffName}}</b></p>
+        <p class="pad-cus"><b>{{me.Name}}</b></p>
         <button type="button"
                 class="btn btn-sm me-2 font-size-24 d-lg-none header-item waves-effect waves-light"
                 data-bs-toggle="collapse" data-bs-target="#topnav-menu-content">
           <i class="mdi mdi-menu"></i>
         </button>
         <button @click="openUserModel" title="profile" style="margin: 0px 3px" class="logout"><i class="ti-user"></i></button>
-        <p class="pad-cus-badge badge badge-primary">{{me.roles ? me.roles.RoleName:''}}</p>
+        <p class="pad-cus-badge badge badge-primary">{{me.user_type ? me.user_type.UserTypeName:''}}</p>
         <button @click="logout" title="Logout" class="logout"><i class="ti-power-off"></i></button>
       </nav>
     </div>

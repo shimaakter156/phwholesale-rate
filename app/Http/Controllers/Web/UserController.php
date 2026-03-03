@@ -62,7 +62,7 @@ class UserController extends Controller
                 $q->orWhere('Email', 'like', '%' . $search . '%');
                 $q->orWhere('PhoneNo', 'like', '%' . $search . '%');
             })
-            ->where('UserManager.UserTypeID', '=', '3')
+            ->where('UserManager.UserTypeID', '!=', '1')
             ->orderBy('Name', 'asc');
         if ($request->type === 'export') {
             return response()->json([

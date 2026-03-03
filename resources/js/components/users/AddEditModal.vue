@@ -14,7 +14,7 @@
                     <ValidationProvider name="Staff ID" mode="eager" rules="required" v-slot="{ errors }">
                       <div class="form-group">
                         <label for="name">Staff ID <span class="error">*</span></label>
-                        <input type="text" class="form-control" :class="{'error-border': errors[0]}" @change="loadFromHR"
+                        <input type="text" class="form-control" :class="{'error-border': errors[0]}"
                                v-model="staffId" placeholder="Staff ID" :disabled="actionType==='edit'" autocomplete="off">
                         <span class="error-message"> {{ errors[0] }}</span>
                       </div>
@@ -27,39 +27,6 @@
                         <input type="text" class="form-control" :class="{'error-border': errors[0]}" id="name"
                                v-model="staffName" name="staff-name" placeholder="Staff Name"
                                :disabled="actionType==='edit'" readonly>
-                        <span class="error-message"> {{ errors[0] }}</span>
-                      </div>
-                    </ValidationProvider>
-                  </div>
-                  <div class="col-12 col-md-6">
-                    <ValidationProvider name="Designation" mode="eager" rules="required" v-slot="{ errors }">
-                      <div class="form-group">
-                        <label for="designation">Designation <span class="error">*</span></label>
-                        <input type="text" class="form-control" :class="{'error-border': errors[0]}" id="designation"
-                               v-model="designation" name="designation" placeholder="Designation">
-                        <span class="error-message"> {{ errors[0] }}</span>
-                      </div>
-                    </ValidationProvider>
-                  </div>
-                  <div class="col-12 col-md-6">
-                    <ValidationProvider name="Business" mode="eager" rules="required" v-slot="{ errors }">
-                      <div class="form-group">
-                        <label for="business">Business / Service <span class="error">*</span></label>
-                        <multiselect v-model="business" :options="businessList" :multiple="false" :close-on-select="true"
-                                     :clear-on-select="false" :preserve-search="true" placeholder="Select Business"
-                                     label="BusinessName" track-by="Business" @input="changeBusiness">
-
-                        </multiselect>
-                        <span class="error-message"> {{ errors[0] }}</span>
-                      </div>
-                    </ValidationProvider>
-                  </div>
-                  <div class="col-12 col-md-6">
-                    <ValidationProvider name="department" mode="eager" rules="required" v-slot="{ errors }">
-                      <div class="form-group">
-                        <label for="name">Department <span class="error">*</span></label>
-                        <input type="text" class="form-control" :class="{'error-border': errors[0]}" id="department"
-                               v-model="department" name="department" placeholder="Department" readonly>
                         <span class="error-message"> {{ errors[0] }}</span>
                       </div>
                     </ValidationProvider>
@@ -89,33 +56,8 @@
                       <div class="form-group">
                         <label for="user-type">User Type <span class="error">*</span></label>
                         <multiselect v-model="userType" :options="roles" :multiple="false" :close-on-select="true"
-                                     :clear-on-select="false" :preserve-search="true" placeholder="Select Role"
-                                     label="RoleName" track-by="RoleID" @input="changeUserType">
-
-                        </multiselect>
-                        <span class="error-message"> {{ errors[0] }}</span>
-                      </div>
-                    </ValidationProvider>
-                  </div>
-                  <div class="col-12 col-md-6" v-if="allowedVisible">
-                    <ValidationProvider name="Allowed Business" mode="eager" rules="required" v-slot="{ errors }">
-                      <div class="form-group">
-                        <label for="allowed_business">Allowed Business / Service <span class="error">*</span></label>
-                        <multiselect @input="changeAllowedBusiness" v-model="selectedBusiness" :options="businessList" :multiple="true" :close-on-select="true"
-                                     :clear-on-select="false" :preserve-search="true" placeholder="Allow Business"
-                                     label="BusinessName" track-by="Business">
-                        </multiselect>
-                        <span class="error-message"> {{ errors[0] }}</span>
-                      </div>
-                    </ValidationProvider>
-                  </div>
-                  <div class="col-12 col-md-6" v-if="allowedVisible">
-                    <ValidationProvider name="Allowed Department" mode="eager" rules="required" v-slot="{ errors }">
-                      <div class="form-group">
-                        <label for="allowed_department">Allowed Department <span class="error">*</span></label>
-                        <multiselect @input="changeAllowedDepartment" v-model="selectedDepartment" :options="departmentList" :multiple="true" :close-on-select="false"
-                                     :clear-on-select="false" :preserve-search="true" placeholder="Allow Department"
-                                     label="DeptName" track-by="DeptCode">
+                                     :clear-on-select="false" :preserve-search="true" placeholder="Select User type"
+                                     label="UserTypeName" track-by="UserTypeID" >
 
                         </multiselect>
                         <span class="error-message"> {{ errors[0] }}</span>
@@ -131,20 +73,6 @@
                           <option value="0">Inactive</option>
                         </select>
                         <span class="error-message"> {{ errors[0] }}</span>
-                      </div>
-                    </ValidationProvider>
-                  </div>
-                  <div class="col-12 col-md-6">
-                    <ValidationProvider name="signature" mode="eager" rules="">
-                      <div class="form-group">
-                        <div v-if="signature">
-                          <img :src="`${mainOrigin}/uploads/${signature}`" alt="signature" width="200" height="100">
-                          <button type="button" class="btn btn-danger btn-sm" @click="() => {signature = ''}">Remove</button>
-                        </div>
-                        <div v-else>
-                          <label for="signature">Signature </label>
-<!--                          <ImageUpload/>-->
-                        </div>
                       </div>
                     </ValidationProvider>
                   </div>
@@ -214,10 +142,6 @@ export default {
       title: '',
       staffId: '',
       staffName: '',
-      business: '',
-      department: '',
-      deptCode: '',
-      designation: '',
       buttonText: '',
       mobile: '',
       email: '',
@@ -229,17 +153,10 @@ export default {
       type: 'add',
       actionType: '',
       buttonShow: false,
-      selectedBusiness: '',
-      businessList: [],
-      selectedDepartment: '',
-      departmentList: [],
       roles: [],
       allSubMenu: [],
       filteredSubMenu: [],
       allSubMenuId: [],
-      allowedVisible: false,
-      croppedImage: '',
-      signature: ''
     }
   },
   computed: {},
@@ -247,9 +164,6 @@ export default {
     $('#add-edit-dept').on('hidden.bs.modal', () => {
       this.$emit('changeStatus')
     });
-    bus.$on('backToModal', (image) => {
-      this.croppedImage = image
-    })
     bus.$on('add-edit-user', (row) => {
       if (row) {
         this.selectedBusiness = [];
@@ -261,30 +175,15 @@ export default {
           instance.buttonText = "Update";
           instance.staffName = user.StaffName;
           instance.staffId = user.StaffID;
-          instance.business = user.business;
-          instance.designation = user.Designation;
-          instance.department = user.Department;
-          instance.deptCode = user.DeptCode;
           instance.mobile = user.Mobile;
           instance.email = user.Email;
           instance.status = user.Status;
-          instance.signature = user.Signature;
           instance.userType = {
             RoleName: user.roles.RoleName,
             RoleID: user.roles.RoleID
           };
-          response.data.user_business.forEach(function(item) {
-            instance.selectedBusiness.push(item.business)
-          });
-          response.data.user_department.forEach(function(item) {
-            instance.selectedDepartment.push(item.department)
-          });
-          response.data.user_submenu.forEach(function(item) {
-            instance.allSubMenuId.push(item.SubMenuID)
-          });
           instance.buttonShow = true;
           instance.actionType = 'edit';
-          instance.allowedVisible = user.roles.RoleID === 'RepresentativeUser';
           instance.getData();
         },function(error){
 
@@ -294,17 +193,11 @@ export default {
         this.buttonText = "Add";
         this.staffId = '';
         this.staffName = '';
-        this.designation = '';
-        this.business = '';
-        this.department = '';
-        this.deptCode = '';
         this.mobile = '';
         this.email = '';
         this.status = '1';
         this.password = '';
         this.userType = '';
-        this.selectedBusiness = '';
-        this.selectedDepartment = '';
         this.allSubMenu = [];
         this.actionType = 'add'
         this.getData();
@@ -321,34 +214,12 @@ export default {
     getData() {
       let instance = this;
       this.axiosGet('user/modal',function (response) {
-        instance.businessList = response.business;
-        instance.departmentList = response.department;
-        instance.roles = response.roles;
+        instance.roles = response.userTypes;
         instance.allSubMenu = response.allSubMenus;
         instance.filteredSubMenu = instance.checkSubMenus();
       },function (error) {
 
       });
-    },
-    changeBusiness(value) {
-      this.business = value
-      this.filteredSubMenu = this.checkSubMenus()
-    },
-    checkSubMenus() {
-      let data = this.allSubMenu
-      let filtered = []
-      if (this.business.Business == '94' || this.business.Business == '97') {
-        data.forEach(function(item) {
-          filtered.push(item);
-        });
-      } else {
-        data.forEach(function(item) {
-          if (item.MenuID !== 'Finance') {
-            filtered.push(item);
-          }
-        });
-      }
-      return filtered;
     },
     onSubmit() {
       this.$store.commit('submitButtonLoadingStatus', true);
@@ -358,19 +229,12 @@ export default {
       this.axiosPost(url, {
         staffId: this.staffId,
         staffName: this.staffName,
-        designation: this.designation,
-        business: this.business.Business,
-        department: this.department,
-        deptCode: this.deptCode,
         email: this.email,
         mobile: this.mobile,
         status: this.status,
         userType: this.userType,
-        allowedBusiness: this.selectedBusiness,
-        allowedDepartment: this.selectedDepartment,
         password: this.password,
         selectedSubMenu: this.allSubMenuId,
-        signature: this.croppedImage
       }, (response) => {
         this.successNoti(response.message);
         $("#add-edit-dept").modal("toggle");
@@ -381,53 +245,24 @@ export default {
         this.$store.commit('submitButtonLoadingStatus', false);
       })
     },
-    changeUserType(val) {
-      if (val === null) {
-        this.allowedVisible = false
-      } else if (val.RoleID === 'RepresentativeUser') {
-        this.allowedVisible = true
-      } else {
-        this.allowedVisible = false
-      }
-    },
+
     loadFromHR(e) {
       var staffId = e.target.value;
       let instance = this;
       this.axiosGet('user/hr-data?staffId='+staffId,function (response){
         if (response.data.length === 0) {
           instance.staffName = ""
-          instance.designation = ""
-          instance.department = ""
-          instance.deptCode = ""
           instance.buttonShow = false
           instance.errorNoti('No staff found with this staff ID!')
         } else {
           instance.staffName = response.data.Name
-          instance.designation = response.data.DesgName
-          instance.department = response.data.DeptName
-          instance.deptCode = response.data.DeptCode
           instance.buttonShow = true
         }
       },function (error){
 
       });
     },
-    changeAllowedBusiness(row) {
-      let all = row.filter(function (item) {
-        return item.Business === 'All'
-      })
-      if (all.length > 0) {
-        this.selectedBusiness = all
-      }
-    },
-    changeAllowedDepartment(row) {
-      let all = row.filter(function (item) {
-        return item.DeptCode === 'All'
-      })
-      if (all.length > 0) {
-        this.selectedDepartment = all
-      }
-    },
+
   }
 }
 </script>
