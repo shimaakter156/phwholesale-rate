@@ -4,6 +4,7 @@ import Login from '../views/auth/Login.vue';
 import Main from '../components/layouts/Main';
 import Dashboard from '../views/dashboard/Index.vue';
 import Users from '../views/users/Index';
+import DayWiseMarketRateReport from '../views/reports/MarketRate/dayWiseMarketRate.vue';
 
 
 
@@ -52,6 +53,11 @@ const routes = [
                 path: baseurl + 'users',
                 name: 'Users',
                 component: Users
+            },
+             {
+                path: baseurl + 'report/day-wise-market-rate',
+                name: 'DayWiseMarketRateReport',
+                component: DayWiseMarketRateReport
             },
 
 

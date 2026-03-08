@@ -66,25 +66,31 @@ class UserController extends Controller
     public function update(UserUpdateRequest $request)
     {
         try {
+            $staffID = $request->staffId;
+            $userTypeID = $request->userType['UserTypeID'];
+            $location = $request->location;
+            $selectedSubMenu = $request->selectedSubMenu;
+
             DB::beginTransaction();
-            $user = User::find($request->staffId);
-            $user->Email = $request->email;
-            $user->Mobile = $request->mobile;
-            $user->Status = $request->status;
-            $user->RoleID = $request->userType['RoleID'];
-            $user->UpdatedBy = Auth::user()->StaffID;
-            $user->UpdatedAt = Carbon::now()->format('Y-m-d H:i:s');
-            $user->save();
+
+            $this->userService->updateUser($request, $userTypeID);
+
+            if (!empty($location)) {
+                $this->userService->deleteUserLocation($staffID);
+                $this->userService->insertUserLocation($location, $staffID);
+            }
+
+            if (!empty($selectedSubMenu)) {
+                $this->userService->deleteUserSubmenu($staffID);
+                $this->userService->insertUserSubmenu($selectedSubMenu, $staffID);
+            }
+
             DB::commit();
-            return response()->json([
-                'status' => 'success',
-                'message' => 'User Updated Successfully'
-            ]);
+            return $this->successResponseWeb(null, 'User Updated Successfully', 200);
+
         } catch (\Exception $exception) {
-            return response()->json([
-                'status' => 'error',
-                'message' => $exception->getMessage()
-            ], 500);
+            DB::rollBack();
+            return $this->errorResponseWeb($exception->getMessage() . '-' . $exception->getLine(), 500);
         }
     }
 
@@ -154,8 +160,11 @@ class UserController extends Controller
 
     public function getUserInfo($staffId)
     {
-        $user = User::where('StaffID', $staffId)->with(['userType','userSubmenu'])->first();
-        $allSubMenus = Menu::whereNotIn('MenuID', ['Dashboard', 'Users'])->with('allSubMenus')->orderBy('MenuOrder', 'asc')->get();
+        $user = User::where('StaffID', $staffId)->with(['userType','userSubmenu','userLocation.location'])->first();
+        $allSubMenus = Menu::whereNotIn('MenuID', ['Dashboard', 'Users'])
+                        ->with('allSubMenus')
+                        ->orderBy('MenuOrder', 'asc')
+                        ->get();
         return response()->json([
             'status' => 'success',
             'data' => $user,

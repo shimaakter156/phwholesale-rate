@@ -103,8 +103,8 @@
                       <div class="form-group">
                         <label for="status">Status <span class="error">*</span></label>
                         <select class="form-control" id="status" v-model="status">
-                          <option value="1">Active</option>
-                          <option value="0">Inactive</option>
+                          <option value="Y">Active</option>
+                          <option value="N">Inactive</option>
                         </select>
                         <span class="error-message"> {{ errors[0] }}</span>
                       </div>
@@ -142,8 +142,8 @@
 </template>
 
 <script>
-import { bus } from "../../app";
-import { Common } from "../../mixins/common";
+import {bus} from "../../app";
+import {Common} from "../../mixins/common";
 
 export default {
   mixins: [Common],
@@ -172,16 +172,17 @@ export default {
     $('#add-edit-dept').on('hidden.bs.modal', () => {
       this.$emit('changeStatus');
     });
-
+    this.getData();
+    this.getLocation();
     bus.$on('add-edit-user', (row) => {
       this.resetForm();
       if (row) {
-        this.axiosGet('user/get-user-info/' + row.UserID, (response) => {
+        this.axiosGet('user/get-user-info/' + row.StaffID, (response) => {
           const user = response.data;
           this.title = 'Update User';
           this.buttonText = 'Update';
           this.staffName = user.Name;
-          this.staffId = user.UserID;
+          this.staffId = user.StaffID;
           this.mobile = user.PhoneNo;
           this.email = user.Email;
           this.status = user.Status;
@@ -189,9 +190,12 @@ export default {
             UserTypeName: user.user_type.UserTypeName,
             UserTypeID: user.user_type.UserTypeID
           };
+          this.location = user.user_location.map(item=>({
+            LocationCode : item.LocationCode,
+            LocationName : item.location.LocationName
+          }))
           this.buttonShow = true;
           this.actionType = 'edit';
-          this.getData();
         }, (error) => {
           console.log('Error fetching user info:', error);
         });
@@ -200,8 +204,7 @@ export default {
         this.buttonText = 'Add';
         this.buttonShow = true;
         this.actionType = 'add';
-        this.getData();
-        this.getLocation();
+
       }
       $("#add-edit-dept").modal("toggle");
     });
@@ -228,6 +231,7 @@ export default {
       this.axiosGet('user/modal', (response) => {
         this.userTypes = response.userTypes || [];
         this.allSubMenu = response.allSubMenus || [];
+        console.log('this.allSubMenu',this.allSubMenu)
       }, (error) => {
         console.log('Error fetching modal data:', error);
       });

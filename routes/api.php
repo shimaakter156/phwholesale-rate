@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\MobileApiController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CommonController;
+use App\Http\Controllers\Web\ReportController;
 use App\Http\Controllers\Web\SettingController;
 use App\Http\Controllers\Web\UserController;
 use Illuminate\Support\Facades\Route;
@@ -37,6 +38,12 @@ Route::group(['middleware' => ['jwt:api']], function () {
         Route::post('reset-password',[UserController::class,'updatePassword']);
         Route::post('password-change',[UserController::class,'passwordChange']);
     });
+
+    Route::group(['prefix' => 'report'],function () {
+        Route::get('market-rate', [ReportController::class, 'marketRateReport']);
+
+    });
+
 //    Route::get('/send-test-email', function () {
 //        $toEmail = 'rabiul@aci-bd.com';
 //

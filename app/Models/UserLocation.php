@@ -14,4 +14,8 @@ class UserLocation extends Model
     public $incrementing = false;
     protected $keyType = "string";
     protected $guarded = [];
+    public function location(){
+        return $this->belongsTo(Location::class,'LocationCode','LocationCode');
+    }
+
 }

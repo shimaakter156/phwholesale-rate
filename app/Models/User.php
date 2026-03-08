@@ -31,13 +31,13 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasOne(UserType::class,'UserTypeID','UserTypeID');
     }
 
-
-
-
-
     public function userSubmenu()
     {
         return $this->hasMany(SubMenuPermission::class,'UserID','StaffID');
+    }
+    public function userLocation()
+    {
+        return $this->hasMany(UserLocation::class,'UserID','UserID');
     }
 
     public function getAuthPassword()

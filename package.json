@@ -46,6 +46,7 @@
         "vue2-datepicker": "^3.10.4",
         "vuejs-tree": "^3.0.1",
         "vuex": "^3.6.2",
-        "xlsx": "^0.16.7"
+        "xlsx": "^0.16.9",
+        "xlsx-js-style": "^1.2.0"
     }
 }

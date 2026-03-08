@@ -34,7 +34,7 @@ class UserService
         $user->CreatedAt = Carbon::now()->format('Y-m-d H:i:s');
         $user->save();
         if ($selectedSubMenu){
-            $this->menuAdd($selectedSubMenu,$newUserID);
+            $this->insertUserSubmenu($selectedSubMenu,$newUserID);
         }
         return $user;
 
@@ -50,7 +50,7 @@ class UserService
         UserLocation::insert($userLocations);
     }
 
-    public function menuAdd($selectedSubMenu,$newUserID){
+    public function insertUserSubmenu($selectedSubMenu,$newUserID){
         $submenus = [];
         foreach ($selectedSubMenu as $row) {
             $submenus[] = [
@@ -115,5 +115,23 @@ class UserService
         });
 
         return response()->json($users);
+    }
+
+    public function updateUser($request, $userTypeID)
+    {
+        return User::where('StaffID', $request->staffId)->where('UserTypeID','=',$userTypeID)->update([
+            'Email'   => $request->email,
+            'PhoneNo' => $request->mobile,
+            'Status'  => $request->status,
+            'UserTypeID' => $userTypeID,
+        ]);
+    }
+    public function deleteUserLocation($staffID)
+    {
+        UserLocation::where('UserID', $staffID)->delete();
+    }
+    public function deleteUserSubmenu($staffID)
+    {
+        SubMenuPermission::where('UserID', $staffID)->delete();
     }
 }

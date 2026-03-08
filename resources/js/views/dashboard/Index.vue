@@ -12,7 +12,7 @@
       <div class="col-xl-12 col-md-12">
         <div class="card mini-stat bg-gradient-stable text-white header-bg">
           <div class="card-body" v-if="!isLoading">
-            <span style="letter-spacing:5px;">Welcome to  Advance Management System (AMS)</span>
+            <span style="letter-spacing:5px;">Welcome to Underrated Audit</span>
           </div>
           <div class="card-body" v-else>
             <skeleton-loader :row="4"/>
@@ -20,69 +20,69 @@
         </div>
       </div>
     </div>
-    <div class="row">
-      <div class="col-xl-8 col-md-8">
-        <div class="card mini-stat">
-          <div class="card-body">
-            <div class="task">
-              <span>Use Requisition menu for creating advance requisition.</span>
-            </div>
-            <div class="task">
-              <span>Use Adjustment menu for submitting advance adjustment.</span>
-            </div>
-            <div class="task">
-              <span>Use Reports menu for viewing report of unadjusted/adjusted advances.</span>
-            </div>
-            <div class="task">
-              <span>Please change your password on first log in.</span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div v-if="me.RoleID==='SuperAdmin'" class="col-xl-4 col-md-4">
-        <div class="card mini-stat">
-          <div class="card-body">
-            <div class="links">
-              <router-link :to="{name:'Branches'}" class="btn btn-primary" >Add Branch</router-link>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+<!--    <div class="row">-->
+<!--      <div class="col-xl-8 col-md-8">-->
+<!--        <div class="card mini-stat">-->
+<!--          <div class="card-body">-->
+<!--            <div class="task">-->
+<!--              <span>Use Requisition menu for creating advance requisition.</span>-->
+<!--            </div>-->
+<!--            <div class="task">-->
+<!--              <span>Use Adjustment menu for submitting advance adjustment.</span>-->
+<!--            </div>-->
+<!--            <div class="task">-->
+<!--              <span>Use Reports menu for viewing report of unadjusted/adjusted advances.</span>-->
+<!--            </div>-->
+<!--            <div class="task">-->
+<!--              <span>Please change your password on first log in.</span>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--      <div v-if="me.RoleID==='SuperAdmin'" class="col-xl-4 col-md-4">-->
+<!--        <div class="card mini-stat">-->
+<!--          <div class="card-body">-->
+<!--            <div class="links">-->
+<!--              <router-link :to="{name:'Branches'}" class="btn btn-primary" >Add Branch</router-link>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
 
-    <div class="row">
-      <div class="col-xl-4 col-md-4">
-        <div class="card mini-stat">
-          <div class="card-body">
-            <div class="helpline">
-              <span><i class="ti-call"></i> Help Line:</span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-xl-4 col-md-4">
-        <div class="card mini-stat">
-          <div class="card-body">
-            <div class="contact">
-              <p>Md. Anwarul Islam</p>
-              <p>Phone: 01714 163038</p>
-              <p>Email: anwarul@aci-bd.com</p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-xl-4 col-md-4">
-        <div class="card mini-stat">
-          <div class="card-body">
-            <div class="contact">
-              <p>Md. Shazzadul Islam</p>
-              <p>Phone: 01713-053236</p>
-              <p>Email: shazzadul@aci-bd.com</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+<!--    <div class="row">-->
+<!--      <div class="col-xl-4 col-md-4">-->
+<!--        <div class="card mini-stat">-->
+<!--          <div class="card-body">-->
+<!--            <div class="helpline">-->
+<!--              <span><i class="ti-call"></i> Help Line:</span>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--      <div class="col-xl-4 col-md-4">-->
+<!--        <div class="card mini-stat">-->
+<!--          <div class="card-body">-->
+<!--            <div class="contact">-->
+<!--              <p>Md. Anwarul Islam</p>-->
+<!--              <p>Phone: 01714 163038</p>-->
+<!--              <p>Email: anwarul@aci-bd.com</p>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--      <div class="col-xl-4 col-md-4">-->
+<!--        <div class="card mini-stat">-->
+<!--          <div class="card-body">-->
+<!--            <div class="contact">-->
+<!--              <p>Md. Shazzadul Islam</p>-->
+<!--              <p>Phone: 01713-053236</p>-->
+<!--              <p>Email: shazzadul@aci-bd.com</p>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
   </div>
 </template>
 <script>
