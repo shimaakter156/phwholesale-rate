@@ -5,7 +5,7 @@
         <div class="collapse navbar-collapse" id="topnav-menu-content">
           <ul class="navbar-nav active">
             <li class="nav-item dropdown" v-for="(menu,index) in menus" :key="index">
-              <router-link :to="`${menu.MenuLink}`" class="nav-link" :id="`area${index}`" role="button">
+              <router-link :to="`${baseurl()}${menu.MenuLink}`" class="nav-link" :id="`area${index}`" role="button">
                 <i :class="menu.MenuIcon"></i>
                 <span>
                 {{ menu.MenuName }}
@@ -15,7 +15,7 @@
               </router-link>
               <div class="dropdown-menu" v-if="menu.sub_menus.length > 0" :aria-labelledby="`area${index}`">
                 <router-link class="dropdown-item" v-for="(subMenu,index2) in menu.sub_menus" :key="index2"
-                             :to="`${subMenu.SubMenuLink}`">
+                             :to="`${baseurl()}${subMenu.SubMenuLink}`">
                   <span>{{ subMenu.SubMenuName }}</span>
                 </router-link>
               </div>
@@ -110,6 +110,9 @@ export default {
     }
   },
   methods: {
+    baseurl() {
+      return baseurl
+    },
     getData() {
       this.axiosGet('app-supporting-data', (response) => {
         this.menus = response.menus;

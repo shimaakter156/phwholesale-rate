@@ -17,10 +17,10 @@ class ReportService
             ->select(
                 'p.ProductName',
                 'l.LocationName as RegionName',
-                'pr.CompanyPrice as CRate',
+                'p.CompanyRate as CRate',
                 'pr.MarketPrice as MRate',
-                DB::raw('(pr.CompanyPrice - pr.MarketPrice) as Diff'),
-                DB::raw('ROUND(((pr.CompanyPrice - pr.MarketPrice) / pr.CompanyPrice) * 100, 2) as PercentURate')
+                DB::raw('(p.CompanyRate - pr.MarketPrice) as Diff'),
+                DB::raw('ROUND(((p.CompanyRate - pr.MarketPrice) / p.CompanyRate) * 100, 2) as PercentURate')
             )
             ->orderBy('p.ProductName')
             ->get();
@@ -36,5 +36,53 @@ class ReportService
             'products' => $products,
             'average'  => $avg
         ];
+    }
+
+    public function getWholesaleRate($date){
+        $query = DB::table('Product as p')
+            ->leftJoin('WholeSaleMarketRate as w', function ($join) use($date){
+                $join->on('p.ProductCode', '=', 'w.ProductCode')
+                    ->where('w.EntryDate','=', $date);
+            })
+            ->leftjoin('location as l', 'l.LocationCode', '=', 'w.LocationCode')
+
+            ->select(
+                'p.ProductCode',
+                'p.ProductName',
+                'p.CompanyRate',
+                'w.LocationCode',
+                'l.LocationName',
+                'w.MarketPrice as MarketRate',
+                DB::raw('ROUND(p.CompanyRate - w.MarketPrice, 2) as Diff'),
+                DB::raw('ROUND(((p.CompanyRate - w.MarketPrice) / p.CompanyRate) * 100, 2) as PercentURate')
+            )
+            ->orderBy('p.ProductName')
+            ->get();
+
+         return $query;
+    }
+
+    public function getPivotProduct($data){
+
+        $products = [];
+        foreach ($data as $row){
+            if(!isset($products[$row->ProductCode])){
+                $products[$row->ProductCode] =[
+                  'ProductCode'=>$row->ProductCode,
+                  'ProductName'=>$row->ProductName,
+                  'CompanyRate'=>$row->CompanyRate,
+                  'Locations'=>[],
+                ];
+            }
+
+            $products[$row->ProductCode]['Locations'][$row->LocationCode]= [
+                'LocationCode' => $row->LocationCode,
+                'LocationName' => $row->LocationName,
+                'MarketRate'   => $row->MarketRate,
+                'Diff'         => $row->Diff,
+                'PercentURate' => $row->PercentURate,
+            ];
+        }
+        return $products;
     }
 }

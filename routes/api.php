@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\MobileApiController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CommonController;
+use App\Http\Controllers\Web\ProductController;
 use App\Http\Controllers\Web\ReportController;
 use App\Http\Controllers\Web\SettingController;
 use App\Http\Controllers\Web\UserController;
@@ -41,6 +42,14 @@ Route::group(['middleware' => ['jwt:api']], function () {
 
     Route::group(['prefix' => 'report'],function () {
         Route::get('market-rate', [ReportController::class, 'marketRateReport']);
+        Route::get('market-rate-pivot', [ReportController::class, 'marketRatePivotReport']);
+
+    });
+
+    Route::group(['prefix'=>'product'],function (){
+        Route::post('list',[ProductController::class,'index']);
+        Route::post('market-price-list',[ProductController::class,'marketPriceIndex']);
+        Route::post('wholesale-market-price-list',[ProductController::class,'wholesaleMarketPriceIndex']);
 
     });
 

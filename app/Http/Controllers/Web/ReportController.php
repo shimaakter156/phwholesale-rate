@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
+use App\Models\Location;
 use App\Models\WholeSaleMarketRate;
 use App\Services\ReportService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ReportController extends Controller
 {
@@ -30,6 +32,21 @@ class ReportController extends Controller
         return response()->json([
             'date' => $date,
             'regions' => $data
+        ]);
+    }
+    public function marketRatePivotReport(Request $request)
+    {
+        $date = $request->date ?? now()->format('Y-m-d');
+
+        $locations = Location::select('LocationCode','LocationName')->where('Status','=','Y')->distinct()->get();
+        $data = $this->reportService->getWholesaleRate($date);
+
+        $products = $this->reportService->getPivotProduct($data);
+
+        return response()->json([
+            'date'      => $date,
+            'locations' => $locations,
+            'products'  => array_values($products),
         ]);
     }
 }

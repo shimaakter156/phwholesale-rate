@@ -4,12 +4,15 @@ import Login from '../views/auth/Login.vue';
 import Main from '../components/layouts/Main';
 import Dashboard from '../views/dashboard/Index.vue';
 import Users from '../views/users/Index';
+import ProductDetails from '../views/product/Index.vue';
+import ProductMarketPrice from '../views/product/MarketPrice.vue';
+import WholesaleMarketPrice from '../views/product/WholesaleMarketPrice.vue';
 import DayWiseMarketRateReport from '../views/reports/MarketRate/dayWiseMarketRate.vue';
+import MarketRatePivotReport from '../views/reports/MarketRate/wholesaleMarketRate.vue';
 
 
 
 import NotFound from '../views/404/Index';
-// import Profile from '../views/profile/Index';
 import {baseurl} from '../base_url'
 
 Vue.use(VueRouter);
@@ -54,13 +57,28 @@ const routes = [
                 name: 'Users',
                 component: Users
             },
+            {
+                path: baseurl + 'product/details',
+                name: 'ProductDetails',
+                component: ProductDetails
+            },{
+                path: baseurl + 'product/market-price',
+                name: 'ProductMarketPrice',
+                component: ProductMarketPrice
+            },{
+                path: baseurl + 'product/wholesale-market-rate',
+                name: 'WholesaleMarketPrice',
+                component: WholesaleMarketPrice
+            },
              {
                 path: baseurl + 'report/day-wise-market-rate',
                 name: 'DayWiseMarketRateReport',
                 component: DayWiseMarketRateReport
+            }, {
+                path: baseurl + 'report/wholesale-market-rate',
+                name: 'MarketRatePivotReport',
+                component: MarketRatePivotReport
             },
-
-
 
 
         ],
