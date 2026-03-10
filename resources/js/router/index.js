@@ -4,6 +4,8 @@ import Login from '../views/auth/Login.vue';
 import Main from '../components/layouts/Main';
 import Dashboard from '../views/dashboard/Index.vue';
 import Users from '../views/users/Index';
+import SRInfo from '../views/setup/srList.vue';
+import RegionList from '../views/setup/regionList.vue';
 import ProductDetails from '../views/product/Index.vue';
 import ProductMarketPrice from '../views/product/MarketPrice.vue';
 import WholesaleMarketPrice from '../views/product/WholesaleMarketPrice.vue';
@@ -56,6 +58,15 @@ const routes = [
                 path: baseurl + 'users',
                 name: 'Users',
                 component: Users
+            },
+            {
+                path: baseurl + 'setup/sr-info',
+                name: 'SRInfo',
+                component: SRInfo
+            }, {
+                path: baseurl + 'setup/region-list',
+                name: 'RegionList',
+                component: RegionList
             },
             {
                 path: baseurl + 'product/details',

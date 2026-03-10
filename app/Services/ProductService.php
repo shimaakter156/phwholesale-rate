@@ -46,9 +46,9 @@ class ProductService
             ->select(
                 'p.ProductName',
                 'l.LocationName as RegionName',
-                'p.CompanyRate as CRate',
-                'WholeSaleMarketRate.MarketPrice as MRate',
-                DB::raw('(p.CompanyRate - WholeSaleMarketRate.MarketPrice) as Diff'),
+                'p.CompanyRate as CompanyRate',
+                'WholeSaleMarketRate.MarketPrice as MarketRate',
+                DB::raw('(p.CompanyRate - WholeSaleMarketRate.MarketPrice) as Difference'),
                 DB::raw('ROUND(((p.CompanyRate - WholeSaleMarketRate.MarketPrice) / p.CompanyRate) * 100, 2) as PercentURate')
             )
             ->paginate($take);

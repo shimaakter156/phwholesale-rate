@@ -3,6 +3,8 @@
 use App\Http\Controllers\Api\MobileApiController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CommonController;
+use App\Http\Controllers\LocationController;
+use App\Http\Controllers\SRController;
 use App\Http\Controllers\Web\ProductController;
 use App\Http\Controllers\Web\ReportController;
 use App\Http\Controllers\Web\SettingController;
@@ -51,6 +53,11 @@ Route::group(['middleware' => ['jwt:api']], function () {
         Route::post('market-price-list',[ProductController::class,'marketPriceIndex']);
         Route::post('wholesale-market-price-list',[ProductController::class,'wholesaleMarketPriceIndex']);
 
+    });
+
+    Route::group(['prefix'=>'setup'],function (){
+       Route::post('sr-info',[SRController::class,'Index']);
+       Route::post('location-list',[LocationController::class,'Index']);
     });
 
 //    Route::get('/send-test-email', function () {
