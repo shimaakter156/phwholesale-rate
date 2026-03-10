@@ -80,18 +80,13 @@ class UserService
         return $nextUserID;
     }
 
+
     public function userIndex(Request $request)
     {
         $take = $request->take;
         $search = $request->search;
 
-        $query = User::join('UserType', 'UserType.UserTypeID', 'UserManager.UserTypeID')
-            ->where(function ($q) use ($search) {
-                $q->where('Name', 'like', '%' . $search . '%');
-                $q->orWhere('StaffID', 'like', '%' . $search . '%');
-                $q->orWhere('Email', 'like', '%' . $search . '%');
-                $q->orWhere('PhoneNo', 'like', '%' . $search . '%');
-            })
+        $query = $this->userIndexQuery($search)
             ->where('UserManager.UserTypeID', '!=', '1')
             ->orderBy('StaffID', 'desc')
             ->select('UserManager.*', 'UserType.UserTypeName');
@@ -102,6 +97,21 @@ class UserService
             $users = $query->paginate($take);
         }
 
+       $this->userLocationGroupQuery($users);
+
+        return response()->json($users);
+    }
+    public function userIndexQuery($search){
+       return User::join('UserType', 'UserType.UserTypeID', 'UserManager.UserTypeID')
+            ->where(function ($q) use ($search) {
+                $q->where('Name', 'like', '%' . $search . '%');
+                $q->orWhere('StaffID', 'like', '%' . $search . '%');
+                $q->orWhere('Email', 'like', '%' . $search . '%');
+                $q->orWhere('PhoneNo', 'like', '%' . $search . '%');
+            });
+
+    }
+    public function userLocationGroupQuery($users){
         $users->getCollection()->transform(function ($user) {
             $data = DB::table('UserLocation')
                 ->join('Location', 'Location.LocationCode', '=', 'UserLocation.LocationCode')
@@ -111,10 +121,8 @@ class UserService
 
             $user->locations = implode(',', $data->pluck('LocationName')->toArray());
 
-            return $user;
-        });
+            return $user;   });
 
-        return response()->json($users);
     }
 
     public function updateUser($request, $userTypeID)
