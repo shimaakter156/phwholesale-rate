@@ -41,48 +41,50 @@ class UserController extends Controller
     public function store(UserStoreRequest $request)
     {
         try {
-
-            $staffID =$request->staffId;
+            $staffID    = $request->staffId;
             $userTypeID = $request->userType['UserTypeID'];
-            $location = $request->location;
-            DB::beginTransaction();
-            $this->userService->userExist($staffID);
-            $newUserID = $this->userService->generateUserID($userTypeID,$staffID);
+            $location   = $request->location;
 
-           $data = $this->userService->storeUser($request,$newUserID,$userTypeID);
-            if (!empty($location)){
-              $this->userService->insertUserLocation($location,$newUserID);
+            DB::beginTransaction();
+
+            $this->userService->userExist($staffID,$userTypeID); // throws if exists
+
+            $newUserID = $this->userService->generateUserID($userTypeID, $staffID);
+            $data      = $this->userService->storeUser($request, $newUserID, $userTypeID);
+
+            if (!empty($location)) {
+                $this->userService->insertUserLocation($location, $newUserID);
             }
+
             DB::commit();
-            return $this->successResponseWeb($data,'User Created Successfully',201);
+            return $this->successResponseWeb($data, 'User Created Successfully', 201);
+
         } catch (\Exception $exception) {
             DB::rollBack();
-            return $this->errorResponseWeb($exception->getMessage() . '-' . $exception->getLine(),500);
+            return $this->errorResponseWeb($exception->getMessage() . '-' . $exception->getLine(), 500);
         }
-
-
     }
-
     public function update(UserUpdateRequest $request)
     {
         try {
-            $staffID = $request->staffId;
-            $userTypeID = $request->userType['UserTypeID'];
-            $location = $request->location;
-            $selectedSubMenu = $request->selectedSubMenu;
+            $userID        = $request->userID;
+            $staffID    = $request->staffId;
+            $userTypeID    = $request->userType['UserTypeID'];
+            $location      = $request->location ?? [];
+            $selectedSubMenu = $request->selectedSubMenu ?? [];
 
             DB::beginTransaction();
-
             $this->userService->updateUser($request, $userTypeID);
 
+            $this->userService->deleteUserLocation($userID);
             if (!empty($location)) {
-                $this->userService->deleteUserLocation($staffID);
-                $this->userService->insertUserLocation($location, $staffID);
+                $this->userService->insertUserLocation($location, $userID);
             }
 
+            // Always reset submenus
+            $this->userService->deleteUserSubmenu($userID);
             if (!empty($selectedSubMenu)) {
-                $this->userService->deleteUserSubmenu($staffID);
-                $this->userService->insertUserSubmenu($selectedSubMenu, $staffID);
+                $this->userService->insertUserSubmenu($selectedSubMenu, $userID);
             }
 
             DB::commit();
@@ -93,7 +95,6 @@ class UserController extends Controller
             return $this->errorResponseWeb($exception->getMessage() . '-' . $exception->getLine(), 500);
         }
     }
-
     public function updatePassword(Request $request)
     {
         try {
@@ -160,7 +161,7 @@ class UserController extends Controller
 
     public function getUserInfo($staffId)
     {
-        $user = User::where('StaffID', $staffId)->with(['userType','userSubmenu','userLocation.location'])->first();
+        $user = User::where('UserID', $staffId)->with(['userType','userSubmenu','userLocation.location'])->first();
         $allSubMenus = Menu::whereNotIn('MenuID', ['Dashboard', 'Users'])
                         ->with('allSubMenus')
                         ->orderBy('MenuOrder', 'asc')

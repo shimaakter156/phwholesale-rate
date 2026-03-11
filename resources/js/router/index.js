@@ -5,8 +5,8 @@ import Main from '../components/layouts/Main';
 import Dashboard from '../views/dashboard/Index.vue';
 import Users from '../views/users/Index';
 import SRInfo from '../views/setup/srList.vue';
-import RegionList from '../views/setup/regionList.vue';
-import ProductDetails from '../views/product/Index.vue';
+import LocationList from '../views/setup/locationList.vue';
+import ProductDetails from '../views/product/ProductIndex.vue';
 import ProductMarketPrice from '../views/product/MarketPrice.vue';
 import WholesaleMarketPrice from '../views/product/WholesaleMarketPrice.vue';
 import DayWiseMarketRateReport from '../views/reports/MarketRate/dayWiseMarketRate.vue';
@@ -64,9 +64,9 @@ const routes = [
                 name: 'SRInfo',
                 component: SRInfo
             }, {
-                path: baseurl + 'setup/region-list',
-                name: 'RegionList',
-                component: RegionList
+                path: baseurl + 'setup/location-list',
+                name: 'LocationList',
+                component: LocationList
             },
             {
                 path: baseurl + 'product/details',

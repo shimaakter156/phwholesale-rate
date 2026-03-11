@@ -8,10 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 class Location extends Model
 {
     use HasFactory;
-    protected $table = "Location";
-    public $timestamps = "LocationCode";
-    public $primaryKey = false;
-    public $incrementing = false;
-    protected $keyType = "string";
-    protected $guarded = [];
+    protected $table = 'Location';
+    protected $primaryKey = 'LocationCode';
+    public $incrementing = true; // false if LocationCode is not auto-increment
+    public $timestamps = false;
+
+    protected $fillable = [
+        'LocationName',
+        'LocationShortName',
+        'Status',
+    ];
 }

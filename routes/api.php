@@ -58,6 +58,8 @@ Route::group(['middleware' => ['jwt:api']], function () {
     Route::group(['prefix'=>'setup'],function (){
        Route::post('sr-info',[SRController::class,'Index']);
        Route::post('location-list',[LocationController::class,'Index']);
+       Route::get('get-location-info/{locationCode}',[LocationController::class,'getLocationInfo']);
+       Route::post('store-location',[LocationController::class,'store']);
     });
 
 //    Route::get('/send-test-email', function () {

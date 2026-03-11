@@ -15,9 +15,73 @@ class UserService
 {
     use  APIResponseTrait;
 
+    public function userIndex(Request $request)
+    {
+        $take = $request->take;
+        $search = $request->search;
+
+        $query = $this->userIndexQuery($search)
+            ->where('UserManager.UserTypeID', '!=', '1')
+            ->orderBy('StaffID', 'desc')
+            ->select('UserManager.*', 'UserType.UserTypeName');
+
+        if ($request->type === 'export') {
+            $users = $query->get();
+        } else {
+            $users = $query->paginate($take);
+        }
+
+        $this->userLocationGroupQuery($users);
+
+        return response()->json($users);
+    }
+    public function srIndex(Request $request)
+    {
+        $take = $request->take;
+        $search = $request->search;
+
+        $query = $this->userIndexQuery($search)
+            ->where('UserManager.UserTypeID', '=', '3')
+            ->orderBy('StaffID', 'desc')
+            ->select('UserManager.UserID','UserManager.StaffID','UserManager.Name','UserManager.Status');
+
+        if ($request->type === 'export') {
+            $users = $query->get();
+        } else {
+            $users = $query->paginate($take);
+        }
+
+        $this->userLocationGroupQuery($users);
+
+        return response()->json($users);
+    }
+
+    public function userIndexQuery($search){
+        return User::join('UserType', 'UserType.UserTypeID', 'UserManager.UserTypeID')
+            ->where(function ($q) use ($search) {
+                $q->where('Name', 'like', '%' . $search . '%');
+                $q->orWhere('StaffID', 'like', '%' . $search . '%');
+                $q->orWhere('Email', 'like', '%' . $search . '%');
+                $q->orWhere('PhoneNo', 'like', '%' . $search . '%');
+            });
+
+    }
+    public function userLocationGroupQuery($users){
+        $users->getCollection()->transform(function ($user) {
+            $data = DB::table('UserLocation')
+                ->join('Location', 'Location.LocationCode', '=', 'UserLocation.LocationCode')
+                ->where('UserLocation.UserID', $user->UserID)
+                ->select('Location.LocationCode', 'Location.LocationName')
+                ->get();
+
+            $user->locations = implode(',', $data->pluck('LocationName')->toArray());
+
+            return $user;   });
+
+    }
 
     public function storeUser(Request $request,$newUserID,$userTypeID){
-
+dd($request->all());
 
         $selectedSubMenu =$request->selectedSubMenu;
 
@@ -61,9 +125,9 @@ class UserService
         SubMenuPermission::insert($submenus);
     }
 
-    public function userExist($userID){
-        if (User::where('UserID', $userID)->exists()) {
-            return $this->errorResponseWeb('User already exists.',409);
+    public function userExist($staffID,$userTypeID){
+        if (User::where('StaffID', $staffID)->where('UserTypeID','=',$userTypeID)->exists()) {
+            throw new \Exception('User already exists.');
         }
     }
 
@@ -81,65 +145,23 @@ class UserService
     }
 
 
-    public function userIndex(Request $request)
-    {
-        $take = $request->take;
-        $search = $request->search;
-
-        $query = $this->userIndexQuery($search)
-            ->where('UserManager.UserTypeID', '!=', '1')
-            ->orderBy('StaffID', 'desc')
-            ->select('UserManager.*', 'UserType.UserTypeName');
-
-        if ($request->type === 'export') {
-            $users = $query->get();
-        } else {
-            $users = $query->paginate($take);
-        }
-
-       $this->userLocationGroupQuery($users);
-
-        return response()->json($users);
-    }
-    public function userIndexQuery($search){
-       return User::join('UserType', 'UserType.UserTypeID', 'UserManager.UserTypeID')
-            ->where(function ($q) use ($search) {
-                $q->where('Name', 'like', '%' . $search . '%');
-                $q->orWhere('StaffID', 'like', '%' . $search . '%');
-                $q->orWhere('Email', 'like', '%' . $search . '%');
-                $q->orWhere('PhoneNo', 'like', '%' . $search . '%');
-            });
-
-    }
-    public function userLocationGroupQuery($users){
-        $users->getCollection()->transform(function ($user) {
-            $data = DB::table('UserLocation')
-                ->join('Location', 'Location.LocationCode', '=', 'UserLocation.LocationCode')
-                ->where('UserLocation.UserID', $user->UserID)
-                ->select('Location.LocationCode', 'Location.LocationName')
-                ->get();
-
-            $user->locations = implode(',', $data->pluck('LocationName')->toArray());
-
-            return $user;   });
-
-    }
-
     public function updateUser($request, $userTypeID)
     {
-        return User::where('StaffID', $request->staffId)->where('UserTypeID','=',$userTypeID)->update([
+        return User::where('UserID', $request->userID)->where('UserTypeID','=',$userTypeID)->update([
+            'StaffID'   => $request->staffId,
+            'Name'   => $request->staffName,
             'Email'   => $request->email,
             'PhoneNo' => $request->mobile,
             'Status'  => $request->status,
             'UserTypeID' => $userTypeID,
         ]);
     }
-    public function deleteUserLocation($staffID)
+    public function deleteUserLocation($userID)
     {
-        UserLocation::where('UserID', $staffID)->delete();
+        UserLocation::where('UserID', $userID)->delete();
     }
-    public function deleteUserSubmenu($staffID)
+    public function deleteUserSubmenu($userID)
     {
-        SubMenuPermission::where('UserID', $staffID)->delete();
+        SubMenuPermission::where('UserID', $userID)->delete();
     }
 }

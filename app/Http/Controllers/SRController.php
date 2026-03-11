@@ -16,6 +16,7 @@ class SRController extends Controller
 
     public function Index(Request $request){
 
+       return $this->userService->srIndex($request);
     }
 
 }

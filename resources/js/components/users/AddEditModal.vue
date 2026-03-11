@@ -4,7 +4,7 @@
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="modal-header">
-            <div class="modal-title modal-title-font" id="exampleModalLabel">{{ title }}</div>
+            <div class="modal-title modal-title-font" id="exampleModalLabel">{{ title }} <span v-if="UserID">With UserID -{{UserID}}</span></div>
           </div>
           <ValidationObserver v-slot="{ handleSubmit }">
             <form class="form-horizontal" id="form" @submit.prevent="handleSubmit(onSubmit)" autocomplete="off">
@@ -17,7 +17,7 @@
                       <div class="form-group">
                         <label for="staffId">Staff ID <span class="error">*</span></label>
                         <input type="text" class="form-control" :class="{'error-border': errors[0]}"
-                               v-model="staffId" placeholder="Staff ID" :disabled="actionType==='edit'" autocomplete="off">
+                               v-model="staffId" placeholder="Staff ID" >
                         <span class="error-message"> {{ errors[0] }}</span>
                       </div>
                     </ValidationProvider>
@@ -28,7 +28,7 @@
                         <label for="staffName">Staff Name <span class="error">*</span></label>
                         <input type="text" class="form-control" :class="{'error-border': errors[0]}" id="staffName"
                                v-model="staffName" name="staff-name" placeholder="Staff Name"
-                               :disabled="actionType==='edit'" autocomplete="off">
+                               >
                         <span class="error-message"> {{ errors[0] }}</span>
                       </div>
                     </ValidationProvider>
@@ -53,13 +53,13 @@
                       </div>
                     </ValidationProvider>
                   </div>
-                  <div class="col-12 col-md-6">
+                  <div class="col-12 col-md-6" v-if="actionType === 'add'">
                     <ValidationProvider name="User Type" mode="eager" rules="required" v-slot="{ errors }">
                       <div class="form-group">
                         <label for="userType">User Type <span class="error">*</span></label>
                         <multiselect v-model="userType" :options="userTypes" :multiple="false" :close-on-select="true"
                                      :clear-on-select="false" :preserve-search="true" placeholder="Select User Type"
-                                     label="UserTypeName" track-by="UserTypeID">
+                                     label="UserTypeName" track-by="UserTypeID" >
                         </multiselect>
                         <span class="error-message"> {{ errors[0] }}</span>
                       </div>
@@ -150,6 +150,7 @@ export default {
   data() {
     return {
       title: '',
+      UserID: '',
       staffId: '',
       staffName: '',
       buttonText: '',
@@ -177,11 +178,12 @@ export default {
     bus.$on('add-edit-user', (row) => {
       this.resetForm();
       if (row) {
-        this.axiosGet('user/get-user-info/' + row.StaffID, (response) => {
+        this.axiosGet('user/get-user-info/' + row.UserID, (response) => {
           const user = response.data;
           this.title = 'Update User';
           this.buttonText = 'Update';
           this.staffName = user.Name;
+          this.UserID = user.UserID;
           this.staffId = user.StaffID;
           this.mobile = user.PhoneNo;
           this.email = user.Email;
@@ -214,6 +216,7 @@ export default {
   },
   methods: {
     resetForm() {
+      this.UserID = '';
       this.staffId = '';
       this.staffName = '';
       this.mobile = '';
@@ -231,7 +234,6 @@ export default {
       this.axiosGet('user/modal', (response) => {
         this.userTypes = response.userTypes || [];
         this.allSubMenu = response.allSubMenus || [];
-        console.log('this.allSubMenu',this.allSubMenu)
       }, (error) => {
         console.log('Error fetching modal data:', error);
       });
@@ -247,6 +249,7 @@ export default {
       this.$store.commit('submitButtonLoadingStatus', true);
       const url = this.actionType === 'add' ? 'user/add' : 'user/update';
       this.axiosPost(url, {
+        userID: this.UserID,
         staffId: this.staffId,
         staffName: this.staffName,
         email: this.email,

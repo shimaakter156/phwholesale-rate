@@ -10,10 +10,15 @@
       </div>
     </div>
     <advanced-datatable :options="tableOptions">
-      <template slot="action" slot-scope="row">
+      <template slot="status" slot-scope="row">
 <!--        @click="addDeptModal(row.item)"-->
-        <a href="javascript:" > <i class="ti-pencil-alt"></i></a>
+        <span v-if="row.item.status='Y'" class="badge badge-success"> Active</span>
+        <span v-else class="badge badge-secondary"> Inactive</span>
       </template>
+<!--      <template slot="action" slot-scope="row">-->
+<!--&lt;!&ndash;        @click="addDeptModal(row.item)"&ndash;&gt;-->
+<!--        <a href="javascript:" > <i class="ti-pencil-alt"></i></a>-->
+<!--      </template>-->
     </advanced-datatable>
     <add-edit-user @changeStatus="changeStatus" v-if="loading"/>
   </div>
@@ -29,15 +34,15 @@ export default {
   data() {
     return {
       tableOptions: {
-        source: 'product/list',
+        source: 'setup/sr-info',
         search: true,
-        slots: [3],
+        slots: [4],
         hideColumn: ['Status'],
-        slotsName: ['action'],
+        slotsName: ['status'],
         sortable: [2],
 
         pages: [20, 50, 100],
-        addHeader: ['Action']
+        addHeader: ['Status']
       },
       filters:{},
       loading: false,
@@ -77,7 +82,7 @@ export default {
       });
     },
     exportData() {
-      bus.$emit('export-data','user-list-'+moment().format('YYYY-MM-DD'))
+      bus.$emit('export-data','sr-list-'+moment().format('YYYY-MM-DD'))
     }
   }
 }

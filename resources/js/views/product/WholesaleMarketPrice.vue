@@ -82,7 +82,7 @@ export default {
       });
     },
     exportData() {
-      bus.$emit('export-data','user-list-'+moment().format('YYYY-MM-DD'))
+      bus.$emit('export-data','wholesale-market-price-'+moment().format('YYYY-MM-DD'))
     }
   }
 }
