@@ -15,10 +15,10 @@
         <span v-if="row.item.status='Y'" class="badge badge-success"> Active</span>
         <span v-else class="badge badge-secondary"> Inactive</span>
       </template>
-<!--      <template slot="action" slot-scope="row">-->
-<!--&lt;!&ndash;        @click="addDeptModal(row.item)"&ndash;&gt;-->
-<!--        <a href="javascript:" > <i class="ti-pencil-alt"></i></a>-->
-<!--      </template>-->
+      <template slot="action" slot-scope="row">
+<!--        @click="addDeptModal(row.item)"-->
+        <a href="javascript:" > <i class="ti-pencil-alt"></i></a>
+      </template>
     </advanced-datatable>
     <add-edit-user @changeStatus="changeStatus" v-if="loading"/>
   </div>
@@ -38,13 +38,13 @@ export default {
       tableOptions: {
         source: 'product/list',
         search: true,
-        slots: [3],
+        slots: [3,4],
         hideColumn: ['Status'],
-        slotsName: ['status'],
+        slotsName: ['status','action'],
         sortable: [2],
 
         pages: [20, 50, 100],
-        addHeader: ['Status']
+        addHeader: ['Status','Action']
       },
       filters:{},
       loading: false,

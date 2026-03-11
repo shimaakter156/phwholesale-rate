@@ -81,8 +81,6 @@ class UserService
     }
 
     public function storeUser(Request $request,$newUserID,$userTypeID){
-dd($request->all());
-
         $selectedSubMenu =$request->selectedSubMenu;
 
         $user = new User();

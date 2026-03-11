@@ -66,7 +66,7 @@
                     </ValidationProvider>
                   </div>
                   <div class="col-12 col-md-6">
-                    <ValidationProvider name="Location" mode="eager" rules="required" v-slot="{ errors }">
+                    <ValidationProvider name="Location" mode="eager" rules="" v-slot="{ errors }">
                       <div class="form-group">
                         <label for="location">Location <span class="error">*</span></label>
                         <multiselect v-model="location" :options="locationList" :multiple="true" :close-on-select="true"
