@@ -75,6 +75,9 @@ class ProductService
 
         return $query;
     }
+    public function productInfoByID($code){
+        return  Product::where('ProductCode','=',$code);
+    }
     public function product()
     {
         try {
@@ -86,4 +89,26 @@ class ProductService
             return $this->errorResponse($exception->getMessage());
         }
     }
+    public function createProduct($data)
+    {
+        return Product::create([
+            'ProductName' => $data['productName'],
+            'ProductCode' => $data['productCode'],
+            'CompanyRate' => $data['companyRate'],
+            'Status'       => 'Y',
+        ]);
+    }
+
+    public function updateProduct($id, $data)
+    {
+        $prod = $this->productInfoByID($id)->first();
+        $prod->update([
+            'ProductName' => $data['productName'],
+            'ProductCode' => $data['productCode'],
+            'CompanyRate' => $data['companyRate'],
+            'Status'       => $data['status'] ?? 'Y',
+        ]);
+        return $prod;
+    }
+
 }

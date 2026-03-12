@@ -1,8 +1,7 @@
 <template>
   <div class="container-fluid" id="productDetails">
     <breadcrumb :options="['ProductDetails']">
-<!--      @click="addDeptModal()"-->
-<!--      <button class="btn btn-primary" >Add Product</button>-->
+      <button class="btn btn-primary" @click="addItemModal()">Add Product</button>
     </breadcrumb>
     <div class="row" style="padding:8px 0px;">
       <div class="col-md-4">
@@ -11,13 +10,11 @@
     </div>
     <advanced-datatable :options="tableOptions">
       <template slot="status" slot-scope="row">
-        <!--        @click="addDeptModal(row.item)"-->
         <span v-if="row.item.status='Y'" class="badge badge-success"> Active</span>
         <span v-else class="badge badge-secondary"> Inactive</span>
       </template>
       <template slot="action" slot-scope="row">
-<!--        @click="addDeptModal(row.item)"-->
-        <a href="javascript:" > <i class="ti-pencil-alt"></i></a>
+        <a href="javascript:" @click="addItemModal(row.item)"> <i class="ti-pencil-alt"></i></a>
       </template>
     </advanced-datatable>
     <add-edit-product-modal @changeStatus="changeStatus" v-if="loading"/>
@@ -60,7 +57,7 @@ export default {
     changeStatus() {
       this.loading = false
     },
-    addDeptModal(row = '') {
+    addItemModal(row = '') {
       this.loading = true;
       setTimeout(() => {
         bus.$emit('add-edit-product', row);
@@ -84,7 +81,7 @@ export default {
       });
     },
     exportData() {
-      bus.$emit('export-data','user-list-'+moment().format('YYYY-MM-DD'))
+      bus.$emit('export-data','product-list-'+moment().format('YYYY-MM-DD'))
     }
   }
 }

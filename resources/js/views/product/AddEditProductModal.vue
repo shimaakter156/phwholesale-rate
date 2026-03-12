@@ -8,7 +8,6 @@
           </div>
           <ValidationObserver v-slot="{ handleSubmit }">
             <form class="form-horizontal" id="form" @submit.prevent="handleSubmit(onSubmit)" autocomplete="off">
-              <!-- Hidden name field for accessibility -->
               <input type="text" name="name" autocomplete="name" style="display:none">
               <div class="modal-body">
                 <div class="row">
@@ -28,6 +27,16 @@
                         <label for="ProductCode">Product Code <span class="error">*</span></label>
                         <input type="text" class="form-control" :class="{'error-border': errors[0]}" id="productCode"
                                v-model="productCode" name="productCode" placeholder="Product Code">
+                        <span class="error-message"> {{ errors[0] }}</span>
+                      </div>
+                    </ValidationProvider>
+                  </div>
+                  <div class="col-12 col-md-6">
+                    <ValidationProvider name="CompanyRate" mode="eager" rules="" v-slot="{ errors }">
+                      <div class="form-group">
+                        <label for="CompanyRate">Company Rate<span class="error">*</span></label>
+                        <input type="number" class="form-control" :class="{'error-border': errors[0]}" id="companyRate"
+                               v-model="companyRate" name="companyRate" placeholder="Company Rate">
                         <span class="error-message"> {{ errors[0] }}</span>
                       </div>
                     </ValidationProvider>
@@ -68,7 +77,7 @@ export default {
   data() {
     return {
       title: '',
-      locationCode: '',
+      companyRate: '',
       productCode: '',
       productName: '',
       status: '',
@@ -84,18 +93,18 @@ export default {
     bus.$on('add-edit-product', (row) => {
       this.resetForm();
       if (row) {
-        this.axiosGet('setup/get-location-info/' + row.LocationCode, (response) => {
-          const location = response;
+        this.axiosGet('setup/get-product-info/' + row.ProductCode, (response) => {
+          const data = response;
           this.title = 'Update Product';
           this.buttonText = 'Update';
-          this.locationCode = location.LocationCode;
-          this.productName = location.ProductName;
-          this.productCode = location.ProductCode;
-          this.status = location.Status;
+          this.companyRate = data.CompanyRate;
+          this.productName = data.ProductName;
+          this.productCode = data.ProductCode;
+          this.status = data.Status;
           this.buttonShow = true;
           this.actionType = 'edit';
         }, (error) => {
-          console.log('Error fetching location info:', error);
+          console.log('Error fetching product info:', error);
         });
       } else {
         this.title = 'Add Product';
@@ -112,8 +121,8 @@ export default {
   },
   methods: {
     resetForm() {
-      this.locationCode = '';
-      this.staffId = '';
+      this.companyRate = '';
+      this.productCode = '';
       this.productName = '';
       this.status = 'Y';
       this.buttonShow = false;
@@ -121,9 +130,9 @@ export default {
 
     onSubmit() {
       this.$store.commit('submitButtonLoadingStatus', true);
-      const url = this.actionType === 'add' ? 'setup/store-location' : 'setup/store-location';
+      const url = this.actionType === 'add' ? 'setup/store-product' : 'setup/store-product';
       this.axiosPost(url, {
-        locationCode: this.locationCode,
+        companyRate: this.companyRate,
         productName: this.productName,
         productCode: this.productCode,
         status: this.status,

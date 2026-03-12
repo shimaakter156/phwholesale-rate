@@ -41,4 +41,5 @@ class LocationController extends Controller
         return $this->locationService->locationInfoByID($locationCode)->first();
     }
 
+
 }
