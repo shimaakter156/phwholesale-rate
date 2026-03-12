@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'name' => env('Pharma Wholesale Rate', 'Laravel'),
+    'name' => env('Pharma Wholesale Rate', 'Pharma Wholesale Rate'),
 
     /*
     |--------------------------------------------------------------------------
