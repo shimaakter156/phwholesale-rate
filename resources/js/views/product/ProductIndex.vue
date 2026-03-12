@@ -20,7 +20,7 @@
         <a href="javascript:" > <i class="ti-pencil-alt"></i></a>
       </template>
     </advanced-datatable>
-    <add-edit-user @changeStatus="changeStatus" v-if="loading"/>
+    <add-edit-product-modal @changeStatus="changeStatus" v-if="loading"/>
   </div>
 </template>
 <script >
@@ -28,11 +28,11 @@
 import {bus} from "../../app";
 import {Common} from "../../mixins/common";
 import moment from "moment";
-import addEditProductModal from "./AddEditProductModal.vue";
+import AddEditProductModal from "./AddEditProductModal.vue";
 
 export default {
+  components: {AddEditProductModal},
   mixins: [Common],
-  components:[addEditProductModal],
   data() {
     return {
       tableOptions: {
@@ -63,7 +63,7 @@ export default {
     addDeptModal(row = '') {
       this.loading = true;
       setTimeout(() => {
-        bus.$emit('add-edit-user', row);
+        bus.$emit('add-edit-product', row);
       })
     },
     changePassword(row) {

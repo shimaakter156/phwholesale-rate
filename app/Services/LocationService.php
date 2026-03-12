@@ -6,6 +6,7 @@ use App\Models\Location;
 use App\Models\UserLocation;
 use App\Traits\APIResponseTrait;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class LocationService
 {
@@ -21,6 +22,7 @@ class LocationService
         $data = $this->locationQuery()->get();
         return $this->successResponse($data, '');
     }
+
 
     public function locationInfoByID($id)
     {
@@ -68,7 +70,7 @@ class LocationService
 
     public function userLocation($userID)
     {
-        $data = UserLocation::select('UserLocation.*', 'm.Name', 'l.LocationName', 'l.LocationShortName')
+        $data = UserLocation::select('UserLocation.LocationCode', 'l.LocationName', 'l.LocationShortName', 'l.Status')
             ->join('UserManager as m', 'm.UserID', '=', 'UserLocation.UserID')
             ->join('Location as l', 'l.LocationCode', '=', 'UserLocation.LocationCode')
             ->where('UserLocation.UserID', '=', $userID)

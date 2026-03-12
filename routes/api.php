@@ -18,8 +18,8 @@ Route::group(['middleware' => 'jwt:api'], function () {
     Route::post('refresh', [AuthController::class, 'refresh']);
     Route::post('me', [AuthController::class, 'me']);
     Route::get('app-supporting-data', [SettingController::class, 'appSupportingData']);
-    Route::get('get-location-list',[MobileApiController::class,'getLocation']);
-    Route::post('get-user-location-list/{userId}',[MobileApiController::class,'getUserLocation']);
+    Route::get('get-location-list',[MobileApiController::class,'getUserLocation']);
+    Route::get('get-user-location-list/{userId}',[MobileApiController::class,'getUserLocation']);
     Route::get('get-product-list',[MobileApiController::class,'getProduct']);
     Route::post('store-market-price',[MobileApiController::class,'store']);
     Route::get('get-wholesale-market-price-list',[MobileApiController::class,'getMarketPrice']);

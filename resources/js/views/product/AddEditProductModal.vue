@@ -81,7 +81,7 @@ export default {
     $('#add-edit-item').on('hidden.bs.modal', () => {
       this.$emit('changeStatus');
     });
-    bus.$on('add-edit-location', (row) => {
+    bus.$on('add-edit-product', (row) => {
       this.resetForm();
       if (row) {
         this.axiosGet('setup/get-location-info/' + row.LocationCode, (response) => {
@@ -108,7 +108,7 @@ export default {
     });
   },
   destroyed() {
-    bus.$off('add-edit-location');
+    bus.$off('add-edit-product');
   },
   methods: {
     resetForm() {
