@@ -1,3 +1,3 @@
-export const baseurl = "/underrated-audit/";
+export const baseurl = "/phwholesale-rate/";
 
-export const projectName = "Underrated audit";
+export const projectName = "Pharma Wholesale Rate";

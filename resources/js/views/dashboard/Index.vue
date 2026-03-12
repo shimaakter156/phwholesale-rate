@@ -12,7 +12,7 @@
       <div class="col-xl-12 col-md-12">
         <div class="card mini-stat bg-gradient-stable text-white header-bg">
           <div class="card-body" v-if="!isLoading">
-            <span style="letter-spacing:5px;">Welcome to Underrated Audit</span>
+            <span style="letter-spacing:5px;">Welcome to {{ projectName() }}</span>
           </div>
           <div class="card-body" v-else>
             <skeleton-loader :row="4"/>
@@ -87,6 +87,7 @@
 </template>
 <script>
 import {Common} from "../../mixins/common";
+import {projectName} from "../../base_url";
 
 export default {
   mixins: [Common],
@@ -104,6 +105,9 @@ export default {
     this.getData();
   },
   methods: {
+    projectName() {
+      return projectName
+    },
     getData() {
       // this.axiosGet('dashboard-data', (response) => {
       //    this.total_pending = response.total_pending;
